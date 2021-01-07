@@ -47,10 +47,38 @@ class HelloApiView(APIView):
 
 class HelloViewSets(viewsets.ViewSet):
     """ Test API View sets """
+    serializer_class = serializers.HelloSerializer
     def list(self,request):
         an_viewset = [
             'uses HTTP methods as function (create,destroy,update,partial_update)',
             'automatically maps to urls using routers',
             'Provides more functionality with less code',
         ]
-        return Response({'message':'Hello!','an_viewset':an_viewset})
+        return Response({'message':'Hello!','an_viewset':an_viewset})	
+    
+    def create(self,request):
+        """ Create a new hello message """
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            name = serializer.validated_data.get('name')
+            message = f'hello {name}'
+            return Response({'message':message})
+        else:
+            return Response(
+                serializer.errors,
+                status = status.HTTP_400_BAD_REQUEST
+            )
+
+    def retrieve(self,request,pk=None):
+        """ geting an object by its id """
+        return Response({'http_method':'GET'})
+
+    def update(self,request,pk=None):
+        return Response({'http_method':'PUT'})
+
+    def partial_update(self,request,pk=None):
+        return Response({'http_method':'PATCH'})
+
+    def destroy(self,request,pk=None):
+        return Response({'http_method':'DELETE'})
+        
