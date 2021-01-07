@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from profiles_api import serializers
+from rest_framework import viewsets
 
 class HelloApiView(APIView):
     """ Test API View. This creates a class based apiview to define the logic for our project"""
@@ -44,3 +45,12 @@ class HelloApiView(APIView):
         return Response({'method':'DELETE'})
 
 
+class HelloViewSets(viewsets.ViewSet):
+    """ Test API View sets """
+    def list(self,request):
+        an_viewset = [
+            'uses HTTP methods as function (create,destroy,update,partial_update)',
+            'automatically maps to urls using routers',
+            'Provides more functionality with less code',
+        ]
+        return Response({'message':'Hello!','an_viewset':an_viewset})
