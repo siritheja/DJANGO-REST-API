@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
-
+from django.conf import settings
 
 # Create your models here.
 class UserProfileManager(BaseUserManager):
@@ -50,3 +50,18 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         """ return email of user """
         return self.email
+
+class ProfileFeedItem(models.Model):
+    """ allow user to store status update in the system. everytime they create new update its gonna create new
+    profile feed item object and associate that object with user using foreign key so that u will not create
+    profile feed for users that is not ezits"""
+    user_profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True) #everytime we create profilefeeditems it automatically add datatime feild
+    def __str__(self):
+        """ return model as a string """
+        self.status_text
+
